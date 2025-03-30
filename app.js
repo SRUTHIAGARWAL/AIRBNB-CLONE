@@ -40,11 +40,31 @@ app.get("/listing",async (req,res)=>{
   res.render("listing.ejs",{newData});
 });
 
+app.get("/listing/new", (req,res)=>{
+  res.render("new.ejs");
+});
+
+app.post("/listing/add", async(req,res)=>{
+  let newList= req.body;
+  newPlace=new Listing({
+    title : newList.title,
+    description : newList.description,
+    image : newList.image,
+    price : newList.price,
+    location : newList.location,
+    country : newList.country
+  });
+   await newPlace.save();
+   res.redirect("/listing");
+});
+
 app.get("/listing/:id", async(req,res)=>{
   let {id}=req.params;
   let list= await Listing.findById(id);
   res.render("place.ejs", {list});
 });
+
+
 
 app.get("/", (req, res) => {
   res.send("Route is working");
