@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing</title>
+</head>
+<body>
+    <h1>HOMYHIVE</h1>
+    <div>
+        <ul>
+            <% for(let data of newData) { %>
+                <div class="place"  style="display: inline-block;" >
+                    <img src= "<%= data.image %>" alt="<%= data.description %>" width="300" height="200">
+                    <p><a href="/listing/<%= data._id%>"><%= data.title %></a> </p>
+                </div>
+         <%   } %>                                                   
+        </ul>
+    </div>
+</body>
+</html>
