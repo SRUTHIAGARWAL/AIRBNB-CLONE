@@ -9,7 +9,7 @@
     <h1><%= list.title %></h1>
     <div>
         <img src="<%= list.image %>" width="100px" height="100px" alt="Image of <%= list.title %>" />
-        <p>PRICE : <%= list.price %></p>
+        <p>PRICE : &#8377; <%= list.price.toLocaleString("en-IN") %></p>
         <br>
         <p>ABOUT : <%= list.description %></p>
         <br>
