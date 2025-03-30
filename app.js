@@ -9,6 +9,7 @@ const Listing = require("./model/listings.js");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(express.urlencoded({ extended: true })); // Parses form data
 //connection of mongoose 
 async function main() {
   await mongoose.connect(MONGO_URL);
@@ -32,6 +33,18 @@ main()
 //   console.log("saved");
 //   res.send("sucessfully saved");
 // });
+
+
+app.get("/listing",async (req,res)=>{
+  const newData = await Listing.find({});
+  res.render("listing.ejs",{newData});
+});
+
+app.get("/listing/:id", async(req,res)=>{
+  let {id}=req.params;
+  let list= await Listing.findById(id);
+  res.render("place.ejs", {list});
+});
 
 app.get("/", (req, res) => {
   res.send("Route is working");
