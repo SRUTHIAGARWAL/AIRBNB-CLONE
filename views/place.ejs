@@ -17,6 +17,12 @@
         <br>
         <p>COUNTRY : <%= list.country %></p>
         <br>
+        <form method="GET" action="/listing/<%=list._id%>/edit">
+            <button>EDIT</button>
+        </form>
+        <form method="POST" action="/listing/<%= list._id%>?_method=delete">
+            <button>DELETE</button>
+        </form>
     </div>
 </body>
 </html>

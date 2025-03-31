@@ -4,13 +4,14 @@ const path =require("path");
 const mongoose=require("mongoose");//requiring mongoose for db
 const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
 const Listing = require("./model/listings.js");
+const methodOverride=require("method-override");
 
 // used to set up and configure express to use a templating engine ejs for rendering dynamci web pages
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true })); // Parses form data
-//connection of mongoose 
+app.use(methodOverride('_method'));//connection of mongoose 
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
@@ -38,6 +39,24 @@ main()
 app.get("/listing",async (req,res)=>{
   const newData = await Listing.find({});
   res.render("listing.ejs",{newData});
+});
+
+app.get("/listing/:id/edit", async(req,res)=>{
+  let {id}=req.params;
+  let list= await Listing.findById(id);
+  res.render("edit.ejs", {list});
+});
+
+app.put("/listing/:id",async (req,res)=>{
+  let {id}=req.params;
+  await Listing.findByIdAndUpdate(id,{...req.body.Listing});
+  res.redirect("/listing");
+});
+
+app.delete("/listing/:id",async (req,res)=>{
+  let {id}=req.params;
+  await Listing.findByIdAndDelete(id);
+  res.redirect("/listing");
 });
 
 app.get("/listing/new", (req,res)=>{
