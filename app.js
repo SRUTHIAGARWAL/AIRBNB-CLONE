@@ -1,17 +1,21 @@
 const express= require("express");
+const listing=require("./routes/listing.js");
+const review=require("./routes/review.js");
 app = express();
 const ejsMate= require("ejs-mate");
 const path =require("path");
 const mongoose=require("mongoose");//requiring mongoose for db
 const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
+
 const Listing = require("./model/listings.js");
+
 const methodOverride=require("method-override");
 app.engine('ejs',ejsMate);
 
 // used to set up and configure express to use a templating engine ejs for rendering dynamci web pages
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); // Parses form data
 app.use(methodOverride('_method'));//connection of mongoose 
@@ -38,59 +42,46 @@ main()
 //   res.send("sucessfully saved");
 // });
 
+function asyncWrap(fn)
+{
+   return function(req,res,next)
+   {
+    fn(req,res,next).catch((err)=> next(err));
+   }
+}
 
-app.get("/listing",async (req,res)=>{
+//adding review
+// app.post("/listing/:id/addReview",async(req,res)=>{
+//       let listing=await Listing.findById(req.params.id);
+//       let review=req.body;
+//       let newReview=new Review({
+//         comment:review.comment,
+//         rating:review.rating
+//       });
+//       listing.review.push(newReview);
+//       await newReview.save();
+//       await listing.save();
+//       res.render("saved");
+// })
+
+
+app.use("/listing",listing);
+app.use("/listing/review",review);
+
+app.get("/",asyncWrap(async (req,res)=>{
   const newData = await Listing.find({});
   res.render("./listings/listing.ejs",{newData});
-});
+}));
 
-app.get("/listing/:id/edit", async(req,res)=>{
-  let {id}=req.params;
-  let list= await Listing.findById(id);
-  res.render("./listings/edit.ejs", {list});
-});
+app.all("*",(req,res,next)=>{
+  next(new ExpressError(404,"page not found"));
+})
 
-app.put("/listing/:id",async (req,res)=>{
-  let {id}=req.params;
-  await Listing.findByIdAndUpdate(id,{...req.body.Listing});
-  res.redirect("/listing");
-});
-
-app.delete("/listing/:id",async (req,res)=>{
-  let {id}=req.params;
-  await Listing.findByIdAndDelete(id);
-  res.redirect("/listing");
-});
-
-app.get("/listing/new", (req,res)=>{
-  res.render("./listings/new.ejs");
-});
-
-app.post("/listing/add", async(req,res)=>{
-  let newList= req.body;
-  newPlace=new Listing({
-    title : newList.title,
-    description : newList.description,
-    image : newList.image,
-    price : newList.price,
-    location : newList.location,
-    country : newList.country
-  });
-   await newPlace.save();
-   res.redirect("/listing");
-});
-
-app.get("/listing/:id", async(req,res)=>{
-  let {id}=req.params;
-  let list= await Listing.findById(id);
-  res.render("./listings/place.ejs", {list});
-});
-
-
-
-app.get("/", (req, res) => {
-  res.send("Route is working");
-});
+app.use((err,req,res,next)=>{
+  let {status=500,message="Some Error has Occured"}=err;
+  // res.status(status).send(message);
+  res.render("./listings/error.ejs",{err});
+})
 
 app.listen(2901, () => {
   console.log("Server is listening on port 2901");
