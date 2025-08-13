@@ -8,35 +8,35 @@
         <div>
             <div class="mb-3">
                 <label for="title" class="form-label">TITLE OF YOUR PLACE : </label>
-                <input type="text" class="form-control" id="title" name="title" required>
+                <input type="text" class="form-control" id="title" name="listing[title]" required>
                 <div class="valid-feedback">Title looks good</div>
                 <div class="invalid-feedback">Enter a title</div>
             </div>
              <div class="mb-3">
                 <label for="description" class="form-label">DESCRIPTION OF YOUR PLACE : </label>
-                <textarea class="form-control" id="description" name="description" required></textarea>
+                <textarea class="form-control" id="description" name="listing[description]" required></textarea>
                 <div class="invalid-feedback">Enter a description minimum of 50 characters.</div>
             </div>
             <div class="row">
                 <div class="mb-3 col-4">
                     <label for="price" class="form-label">RENT OF YOUR PLACE PER NIGHT : </label>
-                    <input class="form-control" id="price" name="price" required>
+                    <input class="form-control" id="price" name="listing[price]" required>
                     <div class="invalid-feedback">Enter the valid price </div>
                 </div>
                 <div class="mb-3 col-8">
                     <label for="location" class="form-label">LOCATION OF YOUR PLACE : </label>
-                    <textarea name="location" id="location" class="form-control" required placeholder="Enter the location in detail"></textarea>
+                    <textarea name="listing[location]" id="location" class="form-control" required placeholder="Enter the location in detail"></textarea>
                     <div class="invalid-feedback">Enter your location in detail.</div>
                 </div>
             </div>
            <div class="mb-3">
                 <label for="country" class="form-label">COUNTRY : </label>
-                <input type="text" class="form-control" id="country" required name="country" >
+                <input type="text" class="form-control" id="country" required name="listing[country]" >
                 <div class="invalid-feedback">Enter the country name.</div>
             </div>
               <div class="mb-3">
                 <label for="image" class="form-label"  >ENTER THE IMAGE OF YOUR LOCATION ONLY IN THE FORM OF URL:</label>
-                <input type="text" class="form-control" id="image" required name="image" >
+                <input type="text" class="form-control" id="image" required name="listing[image]" >
                 <div class="invalid-feedback">Enter a proper url</div>
             </div>
   <button type="submit" style="margin-bottom: 1rem;" class="btn btn-primary">ADD THE LOCATION</button>

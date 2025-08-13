@@ -1,49 +1,52 @@
 <% layout("/layout/boilerplate") -%>
 <body>
-    <div class="row">
-        <div class="col-8 offset-2">
-            <br/>
-    <h1>EDIT YOUR PLACE : <%= list.title %></h1>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <br/>
+      <h1>EDIT YOUR PLACE : <%= list.title %></h1>
 
-    <form class="needs-validation" novalidate method="POST" action="/listing/<%= list._id %>?_method=PUT">
-          <div class="mb-3">
-                <label for="title" class="form-label">TITLE OF YOUR PLACE : </label>
-            <input class="form-control" id="title" type="text" name="Listing[title]" value="<%= list.title %>" required />  </p>
-         <div class="invalid-feedback">Enter a title</div> 
+      <form class="needs-validation" novalidate method="POST" action="/listing/<%= list._id %>?_method=PUT">
+        
+        <div class="mb-3">
+          <label for="title" class="form-label">TITLE OF YOUR PLACE :</label>
+          <input class="form-control" id="title" type="text" name="listing[title]" value="<%= list.title %>" required />
+          <div class="invalid-feedback">Enter a title</div>
         </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">DESCRIPTION OF YOUR PLACE : </label>
-            <textarea class="form-control" name="Listing[description]" value="<%= list.description %>" required ><%= list.description %></textarea>  </p>
-            <div class="invalid-feedback">Enter a description minimum of 50 characters.</div>
 
+        <div class="mb-3">
+          <label for="description" class="form-label">DESCRIPTION OF YOUR PLACE :</label>
+          <textarea class="form-control" id="description" name="listing[description]" required><%= list.description %></textarea>
+          <div class="invalid-feedback">Enter a description minimum of 50 characters.</div>
         </div>
-            <div class="row">
-                  <div class="mb-3 col-6">
-                <label for="price" class="form-label">RENT OF YOUR PLACE PER NIGHT :  </label>
-            <input class="form-control" id="price" type="number" name="Listing[price]" value="<%= list.price %>" required /> </p>
-           <div class="invalid-feedback">Enter the valid price </div>
-        </div>
-            <div class="mb-3 col-6">
-                <label for="country" class="form-label">COUNTRY : </label>
-            <input class="form-control" id="country" type="text" name="Listing[country]" value="<%= list.country %>" required/>  </p>
+
+        <div class="row">
+          <div class="mb-3 col-6">
+            <label for="price" class="form-label">RENT OF YOUR PLACE PER NIGHT :</label>
+            <input class="form-control" id="price" type="number" name="listing[price]" value="<%= list.price %>" required />
+            <div class="invalid-feedback">Enter a valid price</div>
+          </div>
+
+          <div class="mb-3 col-6">
+            <label for="country" class="form-label">COUNTRY :</label>
+            <input class="form-control" id="country" type="text" name="listing[country]" value="<%= list.country %>" required />
             <div class="invalid-feedback">Enter the country name.</div>
-            
-            </div>
-            </div>
-           
-             <div class="mb-3">
-                <label for="location" class="form-label">LOCATION OF YOUR PLACE : </label>
-            <textarea class="form-control" id="location" name="location"value="<%= list.location %>"required ><%= list.location %></textarea>  </p>
-        <div class="invalid-feedback">Enter your location in detail.</div>    
+          </div>
         </div>
-             
-             <div class="mb-3">
-                <label for="image" class="form-label">ENTER THE IMAGE OF YOUR LOCATION ONLY IN THE FORM OF URL: </label>
-            <input type="text" class="form-control" id="image" name="Listing[image]" value="<%= list.image %>" required/>
-           <div class="invalid-feedback">Enter a proper url</div>   
+
+        <div class="mb-3">
+          <label for="location" class="form-label">LOCATION OF YOUR PLACE :</label>
+          <textarea class="form-control" id="location" name="listing[location]" required><%= list.location %></textarea>
+          <div class="invalid-feedback">Enter your location in detail.</div>
         </div>
-         <button style="margin-bottom: 1rem;" class="btn btn-primary ">COMMIT</button>
-    </form>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">ENTER THE IMAGE OF YOUR LOCATION ONLY IN THE FORM OF URL:</label>
+          <input type="text" class="form-control" id="image" name="listing[image]" value="<%= list.image %>" required />
+          <div class="invalid-feedback">Enter a proper URL</div>
+        </div>
+
+        <button style="margin-bottom: 1rem;" class="btn btn-primary">COMMIT</button>
+      </form>
     </div>
-    </div>
+  </div>
 </body>

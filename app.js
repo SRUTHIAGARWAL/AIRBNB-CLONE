@@ -6,6 +6,8 @@ const ejsMate= require("ejs-mate");
 const path =require("path");
 const mongoose=require("mongoose");//requiring mongoose for db
 const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
+const session=require("express-session");
+const flash=require("connect-flash");
 
 const Listing = require("./model/listings.js");
 
@@ -19,6 +21,23 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); // Parses form data
 app.use(methodOverride('_method'));//connection of mongoose 
+app.use(session({secret:"secretKey",
+  resave:false,
+  saveUninitialized:true,
+  cookie:{
+    expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly:true
+  }
+}
+));
+app.use(flash());
+
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  next();
+})
+
 async function main() {
   await mongoose.connect(MONGO_URL);
 }

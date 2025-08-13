@@ -1,6 +1,6 @@
 const express=require("express");
 const router=express.Router();
-const ExpressError=require("../util/ExpressError.js");
+const ExpressError=require("../util/ExpressError");
 const {reviewSchema} = require('../schema.js');
 const Review=require("../model/review.js");
 
@@ -17,8 +17,9 @@ function asyncWrap(fn)
 const reviewValidation=(req,res,next)=>{
     let {error} = reviewSchema.validate(req.body);
     if(error)
-    { let errmsg=error.details.map((el)=>el.message).join(",");
-      throw new ExpressError(400,errmsg);
+    { 
+      const msg = error.details.map(el => el.message).join(",");
+      throw new ExpressError(400,msg);
     }
     else
       next();
@@ -32,6 +33,7 @@ router.post(
     await newReview.save();
     listing.review.push(newReview); // corrected field name
     await listing.save();
+    req.flash("success","new review created");
     res.redirect(`/listing/${listing._id}`); // redirect after post
   }));
 
@@ -40,6 +42,7 @@ router.post(
       let {id,reviewid}=req.params;
       await Listing.findByIdAndUpdate(id,{$pull:{review:reviewid}});
       await Review.findByIdAndDelete(reviewid);
+      req.flash("success","review deleted");
       res.redirect(`/listing/${id}`)
   }))
 
