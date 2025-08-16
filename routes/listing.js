@@ -37,8 +37,9 @@ router.put("/:id",listingValidation,asyncWrap(async (req,res)=>{
   
   let {id}=req.params;
   if(!req.body.listing)
-  {
-    throw new ExpressError(400,"Listing not found");//error from client side when the corresponding listing for which search is being made is not present.
+  { req.flash("error","Listing doesnot exist");
+    res.redirect("/");
+    // throw new ExpressError(400,"Listing not found");//error from client side when the corresponding listing for which search is being made is not present.
   }
   await Listing.findByIdAndUpdate(id,{...req.body.listing});
   req.flash("success","Listing Updated");
@@ -64,7 +65,8 @@ router.get("/:id", asyncWrap(async (req, res) => {
 
     if (!list) {
         // If no listing is found, throw a 404 error
-        throw new ExpressError(404, "Listing not found");
+        req.flash("error","Listing doesnot exist");
+        res.redirect("/");
     }
 
     res.render("listings/place.ejs", { list });
@@ -74,7 +76,7 @@ router.post("/add",listingValidation, asyncWrap(async(req,res)=>{
    const newPlace=new Listing(req.body.listing);
    await newPlace.save();
    req.flash("success","new listing created");
-   res.redirect("/listing");
+   res.redirect("/");
 }));
 
 
