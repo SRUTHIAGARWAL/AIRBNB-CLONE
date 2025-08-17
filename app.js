@@ -1,6 +1,7 @@
 const express= require("express");
-const listing=require("./routes/listing.js");
-const review=require("./routes/review.js");
+const listingRoute=require("./routes/listing.js");
+const reviewRoute=require("./routes/review.js");
+const userRoute=require("./routes/user.js");
 app = express();
 const ejsMate= require("ejs-mate");
 const path =require("path");
@@ -8,10 +9,13 @@ const mongoose=require("mongoose");//requiring mongoose for db
 const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
 const session=require("express-session");
 const flash=require("connect-flash");
-
+const passport=require("passport");
+const localStratergy=require("passport-local");
+const User=require("./model/user.js");
 const Listing = require("./model/listings.js");
 
 const methodOverride=require("method-override");
+const user = require("./model/user.js");
 app.engine('ejs',ejsMate);
 
 // used to set up and configure express to use a templating engine ejs for rendering dynamci web pages
@@ -39,6 +43,12 @@ app.use((req,res,next)=>{
   next();
 })
 
+app.use(passport.initialize());  
+app.use(passport.session());
+
+passport.use(new localStratergy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
@@ -84,14 +94,23 @@ function asyncWrap(fn)
 //       res.render("saved");
 // })
 
-
-app.use("/listing",listing);
-app.use("/listing/review",review);
+app.use("/",userRoute);
+app.use("/listing",listingRoute);
+app.use("/listing/review",reviewRoute);
 
 app.get("/",asyncWrap(async (req,res)=>{
   const newData = await Listing.find({});
   res.render("./listings/listing.ejs",{newData});
 }));
+
+app.get("/demoUser",asyncWrap(async(req,res)=>{
+  let fakeUser=new User({
+    email:"agarwalsruthi@gmail.com",
+    username:"Shruthi"
+  });
+  let registerUser=await User.register(fakeUser,"hello@124");
+  res.send(registerUser);
+}))
 
 app.all("*",(req,res,next)=>{
   next(new ExpressError(404,"page not found"));
