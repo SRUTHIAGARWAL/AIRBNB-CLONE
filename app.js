@@ -37,12 +37,6 @@ app.use(session({secret:"secretKey",
 ));
 app.use(flash());
 
-app.use((req,res,next)=>{
-  res.locals.success=req.flash("success");
-  res.locals.error=req.flash("error");
-  next();
-})
-
 app.use(passport.initialize());  
 app.use(passport.session());
 
@@ -52,6 +46,15 @@ passport.deserializeUser(User.deserializeUser());
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
+
+
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
+  res.locals.currUser=req.user;
+  next();
+})
+
 
 main()
   .then(() => console.log("Connection is successful"))
