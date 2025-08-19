@@ -9,6 +9,8 @@
                 <h5 class="card-title">
                     <%= list.title %>
                 </h5>
+                
+                <p class="card-text">owned by <%= list.owner ? list.owner.username:"unknown" %></p>
                 <p class="card-text"><%= list.price %> <br>
                 <%= list.description %><br>
                <%= list.location %><br>
