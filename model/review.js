@@ -1,5 +1,7 @@
 const mongoose=require("mongoose");
 const {Schema}=mongoose;
+const User=require("./user.js");
+
 reviewSchema=new Schema({
     comment:String,
     rating:{
@@ -10,6 +12,10 @@ reviewSchema=new Schema({
     createdAt:{
         type:Date,
         default:Date.now()
+    },
+    author:{
+        type:Schema.Types.ObjectId,
+        ref:"User"
     }
 });
 module.exports=mongoose.model("Review",reviewSchema);

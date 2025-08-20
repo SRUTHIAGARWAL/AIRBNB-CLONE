@@ -1,4 +1,5 @@
 const Listing = require("./model/listings.js");
+const Review=require("./model/review.js");
 const ExpressError=require("./util/ExpressError");
 const {listingSchema} = require('./schema.js');
 const {reviewSchema} = require('./schema.js');
@@ -56,7 +57,36 @@ module.exports.isOwner=async (req,res,next)=>{
   if(res.locals.currUser &&  !listing.owner._id.equals(res.locals.currUser._id))
   {
     req.flash("error","You are not the owner");
-    return res.redirect("/listing")
+    return res.redirect(`/listing/${id}`)
   }
 next();
 }
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+  const { id, reviewid } = req.params;
+
+  // 1. Fetch review document
+  const review = await Review.findById(reviewid);
+
+  // 2. If review not found, redirect
+  if (!review) {
+    req.flash("error", "Review not found!");
+    return res.redirect(`/listing/${id}`);
+  }
+
+  // 3. Ensure user is logged in
+  if (!res.locals.currUser) {
+    req.flash("error", "You must be logged in to do that!");
+    return res.redirect("/login");
+  }
+
+  // 4. Check ownership
+  if (!review.author.equals(res.locals.currUser._id)) {
+    req.flash("error", "You are not authorized to delete this review.");
+    return res.redirect(`/listing/${id}`);
+  }
+
+  // 5. If everything is fine, continue
+  next();
+};
+
