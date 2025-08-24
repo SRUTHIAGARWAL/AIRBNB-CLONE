@@ -13,24 +13,24 @@ function asyncWrap(fn)
    }
 }
 
-router.get("/signup",(req,res)=>{
+router.route("/signup")
+.get((req,res)=>{
     res.render("user/signup.ejs");
-});
+})
+.post(asyncWrap(userController.signUp));
 
-router.post("/signup",asyncWrap(userController.signUp));
-
-router.get("/login",(req,res)=>{
+router.route("/login")
+.get((req,res)=>{
     res.render("user/login.ejs");
-});
-
-router.post("/login",saveRedirectUrl,
+})
+.post(saveRedirectUrl,
     passport.authenticate(
         "local",
         {failureRedirect:"/login",
         failureFlash:true}),
         asyncWrap(userController.login)
-    )
+    );
 
-router.get("/logout",userController.logout)
+router.get("/logout",userController.logout);
 
 module.exports=router;

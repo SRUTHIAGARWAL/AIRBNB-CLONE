@@ -1,26 +1,123 @@
 <% layout("/layout/boilerplate") -%>
  <!-- <%=success%> -->
-    <h1>HOMYHIVE</h1>
+
+    <style>
+        #filters{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter{
+            text-align: center;
+            margin-right: 2rem;
+            margin-top: 2rem;
+            opacity:0.6;
+        }
+        .filter:hover{
+            opacity: 1;
+            cursor: pointer;
+        }
+        .filter p{
+            font-size: 0.8rem;
+        }
+        .tax-toggle{
+           margin-right: 1rem;
+           margin-top: 0.3rem;
+            border: 1px solid black;
+            padding:0.7rem;
+            border-radius: 1rem;
+        }
+        .tax-info{
+            display: none;
+        }
+    </style>
+
+  <div id="filters">
+    <div class="filter">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-bed"></i></div>
+        <p>Rooms</p>
+    </div>
+     <div class="filter">
+        <div><i class="fa-solid fa-city"></i></div>
+        <p>Cities</p>
+    </div>
+     <div class="filter">
+        <div><i class="fa-solid fa-mountain-sun"></i></div>
+        <p>Mountains</p>
+    </div>
+     <div class="filter">
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Swimming Pool</p>
+    </div>
+    <div class="filter">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+    </div>
+     <div class="filter">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+    </div>
+     <div class="filter">
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+    </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-anchor"></i></div>
+            <p>Boat House</p>
+        </div>
+        <div class="filter">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Dome</p>
+        </div>
+    <div class="tax-toggle ms-auto">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+        </div>
+    </div>
+   
+  </div>
+
+
     <div>
         <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
             <% for(let data of newData) { %>
                 <a href="/listing/<%=data._id%>" class="listing_link">
                     <div class="card col listing-card">
-                        <img src="<%=data.image%>" class="card-img-top" alt="Listing_items" style="height: 20rem;">
+                        <img src="<%=data.image.url%>" class="card-img-top" alt="Listing_items" style="height: 20rem;">
                         <div class="card-img-overlay"></div>
                         <div class="card-body">
                             <p class="card-text ">
                                 <b>
                                     <%=data.title%>
                                 </b> <br />
-<%= data.price ? data.price.toLocaleString("en-IN", { style: "currency", currency: "INR" }) : "Price not available" %>
+                                <%= data.price ? data.price.toLocaleString("en-IN", { style: "currency" , currency: "INR" })
+                                    : "Price not available" %>
+                                <i class="tax-info"> &nbsp; &nbsp; + 18%GST</i>
                             </p>
                         </div>
                     </div>
-                   </a>
+                </a>
                 <% } %>
         </div>
     </div>
     <form method="GET" action="/listing/new">
         <button style="margin-bottom: 1rem;" type="submit" class="btn btn-primary">ADD A PLACE</button>
     </form>
+    <script>
+        let taxSwitch=document.getElementById("switchCheckDefault");
+        taxSwitch.addEventListener("click",()=>{
+            let taxInfo=document.getElementsByClassName("tax-info");
+            for(info of taxInfo)
+        {
+            if(info.style.display!="inline")
+            info.style.display="inline";
+        else
+             info.style.display="none";
+        }
+        })
+    </script>

@@ -101,3 +101,7 @@ body{
 {
     padding: 0%;
 }
+#map {
+    height: 400px;
+    width: 100%; /* let Bootstrap column handle width */
+}

@@ -14,8 +14,8 @@ const listingSchema = new mongoose.Schema({
     minLength : 50
    },
     image: {
-      type: String,
-      default: "https://unsplash.com/photos/a-castle-sitting-on-top-of-a-cliff-next-to-the-ocean-2IANV4if3u8"
+    url: String,
+      filename:String
     },
    price :
    {
@@ -40,7 +40,18 @@ const listingSchema = new mongoose.Schema({
       owner:{
     type:Schema.Types.ObjectId,
     ref:"User"
-  } 
+  } ,
+  geometry: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  }
 });
 
 listingSchema.post("findOneAndDelete",async(listing)=>{

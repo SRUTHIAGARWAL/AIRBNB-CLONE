@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV!="production")
+require('dotenv').config();
+
+
 const express= require("express");
 const listingRoute=require("./routes/listing.js");
 const reviewRoute=require("./routes/review.js");
@@ -6,8 +10,10 @@ app = express();
 const ejsMate= require("ejs-mate");
 const path =require("path");
 const mongoose=require("mongoose");//requiring mongoose for db
-const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
+// const MONGO_URL='mongodb://127.0.0.1:27017/wanderlust';
+const dbURL=process.env.ATLAS_DB;
 const session=require("express-session");
+const MongoStore=require("connect-mongo");
 const flash=require("connect-flash");
 const passport=require("passport");
 const localStratergy=require("passport-local");
@@ -25,7 +31,22 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true })); // Parses form data
 app.use(methodOverride('_method'));//connection of mongoose 
-app.use(session({secret:"secretKey",
+
+const store=MongoStore.create({
+  mongoUrl:dbURL,
+  crypto:{
+    secret:"secretKey"
+  },
+  touchAfter:24*3600
+});
+
+store.on("error",()=>{
+  console.log("Error on mongo session store");
+})
+
+app.use(session({
+  store,
+  secret:"secretKey",
   resave:false,
   saveUninitialized:true,
   cookie:{
@@ -44,7 +65,7 @@ passport.use(new localStratergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbURL);
 }
 
 

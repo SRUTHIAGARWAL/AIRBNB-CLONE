@@ -5,7 +5,7 @@
       <br/>
       <h1>EDIT YOUR PLACE : <%= list.title %></h1>
 
-      <form class="needs-validation" novalidate method="POST" action="/listing/<%= list._id %>?_method=PUT">
+      <form class="needs-validation" novalidate method="POST"  enctype="multipart/form-data" action="/listing/<%= list._id %>?_method=PUT">
         
         <div class="mb-3">
           <label for="title" class="form-label">TITLE OF YOUR PLACE :</label>
@@ -39,10 +39,15 @@
           <div class="invalid-feedback">Enter your location in detail.</div>
         </div>
 
+        <div class="mb-3" >
+          Original Image </br>
+          <img src="<%= imageUrl %>" class="img-fluid rounded" style="height:300px; object-fit:cover;">
+
+        </div>
+
         <div class="mb-3">
-          <label for="image" class="form-label">ENTER THE IMAGE OF YOUR LOCATION ONLY IN THE FORM OF URL:</label>
-          <input type="text" class="form-control" id="image" name="listing[image]" value="<%= list.image %>" required />
-          <div class="invalid-feedback">Enter a proper URL</div>
+          <label for="image" class="form-label">ENTER THE IMAGE OF YOUR LOCATION :</label>
+          <input type="file" class="form-control" id="image" name="listing[image]"  />
         </div>
 
         <button style="margin-bottom: 1rem;" class="btn btn-primary">COMMIT</button>

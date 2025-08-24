@@ -1,10 +1,13 @@
-<% layout("/layout/boilerplate") -%>
-
-    <body>
+<% layout("/layout/boilerplate") -%><body>
+        <script>
+            let maptoken="<%= process.env.MAP_TOKEN%>";
+            const coordinates=<%- JSON.stringify(list.geometry.coordinates) %>;
+            const listing= <%- JSON.stringify(list) %>;
+        </script>
         <div class="row">
         <div class="card col-6 offset-3 listing-card" style="margin-top: 1rem;">
 
-            <img src="<%= list.image %>" class="card-img-top" style="height: 30vh;" alt="Image of <%= list.title %>">
+            <img src="<%= list.image.url %>" class="card-img-top" style="height: 30vh;" alt="Image of <%= list.title %>">
             <div class="card-body show-card">
                 <h5 class="card-title">
                     <%= list.title %>
@@ -33,8 +36,19 @@
                 <% if(currUser) {%>
                 <h5>LEAVE A REVIEW</h5>
                 <form method="post" action="/listing/review/<%=list._id %>/addReview" novalidate class="needs-validation">
-                    <label for="Rating" class="form-label">Rating</label>
-                    <input type="range" class="form-range" name="rating" min="1" max="10" id="Rating" required>
+                    
+<fieldset class="starability-heart">
+    <input type="radio" id="first-rate1" name="rating" value="1" />
+    <label for="first-rate1" title="Terrible">1 star</label>
+    <input type="radio" id="first-rate2" name="rating" value="2" />
+    <label for="first-rate2" title="Not good">2 stars</label>
+    <input type="radio" id="first-rate3" name="rating" value="3" />
+    <label for="first-rate3" title="Average">3 stars</label>
+    <input type="radio" id="first-rate4" name="rating" value="4" />
+    <label for="first-rate4" title="Very good">4 stars</label>
+    <input type="radio" id="first-rate5" name="rating" value="5" />
+    <label for="first-rate5" title="Amazing">5 stars</label>
+  </fieldset>
                     <div class="form-floating">
                         <textarea class="form-control" name="comment" placeholder="Leave a comment here" id="comment"
                             style="height: 100px" required></textarea>
@@ -54,8 +68,11 @@
                 <div class="card col-5 mb-3 ms-3" >
                     <div class="card-body" >
                             <h5><%= review.author.username %></h5>
-                            <p class="card-text"><%=review.rating%> (stars) </br>
+                            <p class="starability-result card-text" data-rating="<%= review.rating%>">
+                              </p>
+                            <p class="card-text"> 
                                 <%=review.comment%></p>
+
                     </div>
                     <form class="mb-3" method="post" action="/listing/review/<%= list._id%>/<%= review._id %>?_method=DELETE">
                     <button class="btn btn-sm btn-dark "  >DELETE</button>
@@ -63,5 +80,15 @@
                 </div>
                 <% } %> 
             </div>
+            <div class="row col-6 offset-3">
+                <h3>Where you will be</h3>
+                <div id="map">
+                    
+                </div>
+            </div>
+           
         </div>
+        <script src="/js/map.js">
+          
+        </script>
     </body>
