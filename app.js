@@ -35,7 +35,7 @@ app.use(methodOverride('_method'));//connection of mongoose
 const store=MongoStore.create({
   mongoUrl:dbURL,
   crypto:{
-    secret:"secretKey"
+    secret:process.env.SECRETKEY
   },
   touchAfter:24*3600
 });
@@ -46,7 +46,7 @@ store.on("error",()=>{
 
 app.use(session({
   store,
-  secret:"secretKey",
+  secret:process.env.SECRETKEY,
   resave:false,
   saveUninitialized:true,
   cookie:{
