@@ -104,6 +104,9 @@ function asyncWrap(fn)
    }
 }
 
+app.get("/google64d14718b2fd46d0.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "google64d14718b2fd46d0.html"));
+});
 //adding review
 // app.post("/listing/:id/addReview",async(req,res)=>{
 //       let listing=await Listing.findById(req.params.id);
